@@ -1,0 +1,71 @@
+import jsonrpclib
+from pprint import pprint
+
+ip = '50.242.94.227'
+port = '8243'
+username = 'eapi'
+password = '99saturday'
+# construct switch url in formation 'https://username:password@ip:port'
+switch_url = 'https://{}:{}@{}:{}'.format(username, password, ip, port)
+# append 'command-api' to switch_utl
+switch_url = switch_url + '/command-api'
+# Create remote connection object
+remote_connect = jsonrpclib.Server(switch_url)
+# Execute actions against Arista API - API Explorer will display potential values to be passed into method. this example uses "version" and "cmds"
+response = remote_connect.runCmds(1,['show version'])
+
+# Returns as list of unicode literals
+pprint response
+
+# Enter enable mode, with 'enable' and a blank input password. This is a precursor for entering configuration mode.
+commands = [{'cmd': 'enable', 'input': ''}, 'configure terminal', 'vlan 225', 'name green']
+remote_connect.runCmds(1, commands)
+
+# pyeapi
+import pyeapi
+
+# Define Arista switch connection objects
+[connection:pynet-sw3]
+username: admin1
+password: 99saturday
+host: 50.76.53.27
+port: 8443
+transport: https
+
+[connection:pynet-sw4]
+username: admin1
+password: 99saturday
+host: 50.76.53.27
+port: 8543
+transport: https
+
+# Create connection object
+pynet_sw3 = pyeapi.connect(transport=https, host='50.76.53.27', username='admin1', password='99saturday', port=8443, timeout=60, return_node=False)
+
+pynet_sw3 = pyeapi.connect_to("pynet-sw3")
+pynet_sw4 = pyeapi.connect_to("pynet-sw4")
+
+# Get configuration as list
+pynet_sw3.get_config()
+
+# Get configuration as string
+pynet_sw3.get_config(as_string=True)
+
+# Running show commands and returning output as list, containing command, encoding, dictionary of command output as key,value pairs in a dictionary
+pynet_sw3.enable("show version")
+
+response = pynet_sw3.enable("show interfaces")
+
+response_list = pynet_sw3.enable("show version")
+pprint(show_version)
+
+# Print interface counters for interface
+for dict in response_list['result'][u'interfaces']:
+  if u'interfaceCounters' in response_list['result'][u'interfaces'][dict].keys():
+    print("{} InOctets: {}".format(dict, response_list['result'][u'interfaces'][dict][u'interfaceCounters'][u'inOctets']))
+    print("{} OutOctets: {}".format(dict, response_list['result'][u'interfaces'][dict][u'interfaceCounters'][u'outOctets']))
+    
+>>> for dict in response_list['result'][u'interfaces']:
+...   if u'interfaceCounters' in response_list['result'][u'interfaces'][dict].keys():
+...     print("{} InOctets: {}".format(dict, response_list['result'][u'interfaces'][dict][u'interfaceCounters'][u'inOctets']))
+...     print("{} OutOctets: {}".format(dict, response_list['result'][u'interfaces'][dict][u'interfaceCounters'][u'outOctets']))
