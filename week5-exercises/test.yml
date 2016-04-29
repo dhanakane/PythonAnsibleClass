@@ -1,0 +1,14 @@
+---
+- hosts: local
+  #vars:
+    #hostname: router-1
+    #ip: 1.1.1.1
+    #mask: 255.255.255.252
+  tasks:
+    - name: Generate configuration
+      template: src=/home/dkaneshayoga/pynet_tests/PythonAnsibleClass/week5-exercises/test.j2
+                  dest=/home/dkaneshayoga/pynet_tests/PythonAnsibleClass/week5-exercises/{{item.hostname}}.cfg
+      with_items:
+        - { hostname: router1, ip: 1.1.1.1, mask: 255.255.255.248, neighbor: 2.2.2.1 }
+        - { hostname: router2, ip: 1.1.1.5, mask: 255.255.255.248, neighbor: 2.2.2.5 }
+        - { hostname: router3, ip: 1.1.1.6, mask: 255.255.255.248, neighbor: 2.2.2.9 }

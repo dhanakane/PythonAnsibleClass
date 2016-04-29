@@ -1,0 +1,5 @@
+hostname {{item.hostname}}
+interface Te1/1
+  ip address {{item.ip}} mask {{item.mask}}
+router bgp 1111
+  ip bgp neighbor {{item.neighbor}} mask 255.255.255.248
